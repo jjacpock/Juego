@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Juego de Retos</title>
+    <title>Menú Principal - Juego Íntimo</title>
     <style>
         * {
             margin: 0;
@@ -11,476 +11,104 @@
             box-sizing: border-box;
             font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
         }
-        
+
         body {
             background: linear-gradient(135deg, #2c003e, #0f084b);
             color: #fff;
             min-height: 100vh;
             display: flex;
-            flex-direction: column;
+            justify-content: center;
             align-items: center;
+            text-align: center;
             padding: 20px;
         }
-        
-        .container {
-            max-width: 900px;
+
+        .menu-container {
+            max-width: 600px;
             width: 100%;
-            text-align: center;
+            background: rgba(255, 126, 185, 0.15);
+            padding: 40px 20px;
+            border-radius: 20px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.4);
         }
-        
-        header {
-            margin-bottom: 30px;
-        }
-        
+
         h1 {
-            font-size: 2.8rem;
-            margin-bottom: 10px;
+            font-size: 2.5rem;
+            margin-bottom: 20px;
             color: #ff4d94;
             text-shadow: 0 0 15px rgba(255, 77, 148, 0.6);
         }
-        
-        .subtitle {
-            font-size: 1.2rem;
+
+        p {
             margin-bottom: 30px;
+            font-size: 1.2rem;
             color: #ff7eb9;
         }
-        
-        .game-info {
-            display: flex;
-            justify-content: center;
-            gap: 20px;
-            margin-bottom: 20px;
-            flex-wrap: wrap;
-        }
-        
-        .info-box {
-            background: rgba(255, 126, 185, 0.2);
-            padding: 15px;
-            border-radius: 10px;
-            min-width: 150px;
-        }
-        
-        .game-area {
+
+        .menu-buttons {
             display: flex;
             flex-direction: column;
+            gap: 20px;
             align-items: center;
-            margin: 20px 0;
         }
-        
-        .card-container {
-            width: 250px;
-            height: 350px;
-            perspective: 1000px;
-            margin-bottom: 30px;
-        }
-        
-        .card {
-            width: 100%;
-            height: 100%;
-            position: relative;
-            transform-style: preserve-3d;
-            transition: transform 0.8s;
-            cursor: pointer;
-        }
-        
-        .card.flipped {
-            transform: rotateY(180deg);
-        }
-        
-        .card-face {
-            position: absolute;
-            width: 100%;
-            height: 100%;
-            backface-visibility: hidden;
-            border-radius: 15px;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            padding: 25px;
-            text-align: center;
-            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.4);
-        }
-        
-        .card-front {
-            background: linear-gradient(45deg, #ff4d94, #ff7eb9);
-        }
-        
-        .card-front::before {
-            content: "❤️";
-            font-size: 3.5rem;
-            position: absolute;
-            opacity: 0.2;
-        }
-        
-        .card-back {
-            background: linear-gradient(45deg, #ff7eb9, #ff4d94);
-            transform: rotateY(180deg);
-            overflow-y: auto;
-        }
-        
-        .card-content {
-            font-size: 1.4rem;
-            font-weight: bold;
-            color: #fff;
-            text-shadow: 1px 1px 3px rgba(0, 0, 0, 0.3);
-        }
-        
-        .controls {
-            display: flex;
-            gap: 15px;
-            margin-top: 20px;
-            flex-wrap: wrap;
-            justify-content: center;
-        }
-        
+
         button {
             background: linear-gradient(45deg, #ff4d94, #ff7eb9);
             color: white;
             border: none;
-            padding: 14px 28px;
+            padding: 16px 35px;
             border-radius: 30px;
             cursor: pointer;
-            font-size: 1.1rem;
+            font-size: 1.2rem;
             font-weight: bold;
             transition: all 0.3s;
             box-shadow: 0 5px 15px rgba(255, 126, 185, 0.4);
         }
-        
+
         button:hover {
             transform: translateY(-3px);
             box-shadow: 0 8px 20px rgba(255, 126, 185, 0.6);
         }
-        
+
         button:active {
             transform: translateY(1px);
         }
-        
-        button:disabled {
-            background: linear-gradient(45deg, #cccccc, #999999);
-            cursor: not-allowed;
-            transform: none;
-            box-shadow: none;
-        }
-        
-        .player-turn {
-            margin-top: 20px;
-            font-size: 1.3rem;
-            color: #ff7eb9;
-            font-weight: bold;
-            background: rgba(255, 126, 185, 0.2);
-            padding: 12px 25px;
-            border-radius: 30px;
-        }
-        
-        .instructions {
-            margin-top: 40px;
-            background: rgba(255, 126, 185, 0.15);
-            padding: 20px;
-            border-radius: 15px;
-            max-width: 600px;
-            margin-left: auto;
-            margin-right: auto;
-        }
-        
-        .instructions h3 {
-            margin-bottom: 10px;
-            color: #ff7eb9;
-        }
-        
-        .game-over {
-            margin-top: 20px;
-            padding: 20px;
-            border-radius: 15px;
-            background: rgba(255, 126, 185, 0.3);
-            display: none;
-        }
-        
-        .game-over.show {
-            display: block;
-            animation: fadeIn 0.5s;
-        }
-        
-        @keyframes fadeIn {
-            from { opacity: 0; }
-            to { opacity: 1; }
-        }
-        
-        /* Efectos de confeti */
-        .confetti {
-            position: absolute;
-            width: 10px;
-            height: 10px;
-            background-color: #ff4d94;
-            opacity: 0.7;
-            border-radius: 50%;
-            animation: confetti-fall 5s linear infinite;
-        }
-        
-        @keyframes confetti-fall {
-            0% {
-                transform: translateY(-100px) rotate(0deg);
-                opacity: 1;
-            }
-            100% {
-                transform: translateY(1000px) rotate(720deg);
-                opacity: 0;
-            }
-        }
-        
-        /* Responsive */
+
         @media (max-width: 768px) {
             h1 {
-                font-size: 2.2rem;
+                font-size: 2rem;
             }
-            
-            .card-container {
-                width: 200px;
-                height: 280px;
+            p {
+                font-size: 1rem;
             }
-            
-            .card-content {
-                font-size: 1.1rem;
-            }
-            
             button {
-                padding: 12px 20px;
+                padding: 14px 28px;
                 font-size: 1rem;
             }
         }
     </style>
 </head>
 <body>
-    <div class="container">
-        <header>
-            <h1>Juego de Retos</h1>
-            <p class="subtitle">Toca la carta para revelar un reto</p>
-        </header>
-        
-        <div class="game-info">
-            <div class="info-box">
-                <h3>Jugador en turno</h3>
-                <p id="player-turn">Jugador 1</p>
-            </div>
-            <div class="info-box">
-                <h3>Retos restantes</h3>
-                <p id="remaining-challenges">59</p>
-            </div>
-        </div>
-        
-        <div class="game-area">
-            <div class="card-container">
-                <div class="card" id="card">
-                    <div class="card-face card-front">
-                        <div class="card-content">Toca para revelar un reto</div>
-                    </div>
-                    <div class="card-face card-back">
-                        <div class="card-content" id="challenge-text">Reto aquí</div>
-                    </div>
-                </div>
-            </div>
-            
-            <div class="player-turn" id="current-player">Turno del Jugador 1</div>
-            
-            <div class="controls">
-                <button id="complete-btn" disabled>Cumplí el reto</button>
-                <button id="next-btn" disabled>Siguiente jugador</button>
-                <button id="reset-btn">Reiniciar juego</button>
-            </div>
-            
-            <div class="game-over" id="game-over">
-                <h2>¡Juego Terminado!</h2>
-                <p>Todos los retos han sido completados.</p>
-                <p>Presiona "Reiniciar juego" para comenzar de nuevo.</p>
-            </div>
-        </div>
-        
-        <div class="instructions">
-            <h3>¿Cómo jugar?</h3>
-            <p>1. Toca la carta para revelar un reto</p>
-            <p>2. El jugador en turno debe intentar cumplir el reto</p>
-            <p>3. Presiona "Cumplí el reto" y pasa al siguiente jugador</p>
-
+    <div class="menu-container">
+        <h1> Juegos </h1>
+        <p>Elige una opción para comenzar</p>
+        <div class="menu-buttons">
+            <button onclick="location.href='apartado1.html'">▶️ Juego 1 (parque)</button>
+            <button onclick="accesoJuego2()">▶️ Juego 2🔥</button>
         </div>
     </div>
 
     <script>
-        document.addEventListener('DOMContentLoaded', function() {
-            // Variables del juego
-            let currentPlayer = 1;
-            const challenges = [
-                "Lame cualquier parte de mi cuerpo durante 15 segundos.",
-                "Hazme un beso profundo de mínimo 20 segundos.",
-                "Muérdeme en una parte del cuerpo que elijas.",
-                "Déjame marcarte con un beso húmedo en el lugar que yo quiera.",
-                "Lame mi oreja o muérdela suavemente.",
-                "Quítame una prenda con los dientes.",
-                "Susúrrame tres cosas calientes que quieras hacerme.",
-                "Lámeme el cuello de arriba a abajo lentamente.",
-                "Hazme un masaje sensual en las piernas o muslos.",
-                "Lame o chupa un dedo mio.",
-                "Invéntate una orden hot que yo deba cumplir en el siguiente turno.",
-                "Hazme cerrar los ojos y sorpréndeme con un beso en cualquier parte.",
-                "Lame una prenda mía antes de quitármela.",
-                "Déjame tocarte con los ojos vendados en un sitio que yo elija.",
-                "Bésame interrumpiendo con mordiscos en el labio o cuello.",
-                "Lame mis labios sin llegar a besarme.",
-                "Bésame en el cuello mientras me acaricias la cintura.",
-                "Lame lentamente mi pecho (con ropa o sin ropa).",
-                "Muérdeme la clavícula suavemente.",
-                "Déjame tocarte durante 20 segundos donde yo quiera.",
-                "Bésame con los ojos vendados.",
-                "Lame mis labios y luego muérdelos.",
-                "Chúpame el dedo pulgar lentamente.",
-                "Dime una fantasía sexual que tengas conmigo.",
-                "Hazme un beso lento desde la frente hasta el cuello.",
-                "Ponme tu mano en un lugar prohibido y mantenla ahí 10 segundos.",
-                "Muérdeme suavemente la oreja mientras me susurras algo sucio.",
-                "Lame mi hombro como si fuera un helado.",
-                "Déjame tocarte debajo de tu ropa durante 15 segundos.",
-                "Hazme un beso con lengua sin separar la boca por 15 segundos.",
-                "Chúpame el labio superior y luego bésame fuerte.",
-                "Hazme cerrar los ojos y tócame en una zona inesperada.",
-                "Bésame recorriendo mi cara completa.",
-                "Lame mi abdomen lentamente.",
-                "Déjame quitarte yo una prenda como castigo.",
-                "Susúrrame tres frases calientes seguidas.",
-                "Bésame sin usar las manos.",
-                "Lame mi mano desde la muñeca hasta los dedos.",
-                "Déjame darte un beso donde yo quiera.",
-                "Hazme un beso lento intercalando mordidas.",
-                "Lame mi cuello mientras me tomas de la cara.",
-                "Pon tu boca muy cerca de la mía sin besarme por 10 segundos.",
-                "Dime tres cosas que quieras hacerme en la cama.",
-                "Lame mis labios y di algo atrevido.",
-                "Bésame con intensidad mientras me sujetas fuerte.",
-                "Déjame explorar tu cuerpo con mis manos 20 segundos.",
-                "Chúpame el dedo índice lentamente.",
-                "Lame mi cuello y baja un poco más.",
-                "Hazme un beso en cámara lenta.",
-                "Muérdeme en un lugar que deje marca.",
-                "Dime una fantasía tuya que me involucre esta noche.",
-                "Lame el borde de mi oreja.",
-                "Hazme cerrar los ojos y bésame en un sitio inesperado.",
-                "Tócame con tu boca en un lugar no habitual.",
-                "Hazme un beso interrumpido con caricias intensas.",
-                "Lame mi espalda lentamente.",
-                "Muérdeme el hombro con fuerza controlada.",
-                "Hazme un beso con lengua y muérdeme al final.",
-                "Déjame morderte donde yo quiera.",
-                "Lame mi cuello y termina con un beso profundo."
-            ];
+        function accesoJuego2() {
+            const clave = "j0rdys4r4y1825"; // 🔑 Contraseña que quieras
+            const intento = prompt("Introduce la contraseña para acceder al Juego 2:");
             
-            let availableChallenges = [...challenges];
-            let remainingChallenges = availableChallenges.length;
-            
-            // Elementos DOM
-            const card = document.getElementById('card');
-            const challengeText = document.getElementById('challenge-text');
-            const playerTurn = document.getElementById('player-turn');
-            const currentPlayerElement = document.getElementById('current-player');
-            const remainingElement = document.getElementById('remaining-challenges');
-            const completeBtn = document.getElementById('complete-btn');
-            const nextBtn = document.getElementById('next-btn');
-            const resetBtn = document.getElementById('reset-btn');
-            const gameOver = document.getElementById('game-over');
-            
-            // Estado inicial
-            updateUI();
-            
-            // Event Listeners
-            card.addEventListener('click', function() {
-                if (!card.classList.contains('flipped') && availableChallenges.length > 0) {
-                    drawCard();
-                }
-            });
-            
-            completeBtn.addEventListener('click', function() {
-                createConfetti();
-                markChallengeComplete();
-                nextPlayer();
-                card.classList.remove('flipped');
-                completeBtn.disabled = true;
-                nextBtn.disabled = false;
-                
-                if (availableChallenges.length === 0) {
-                    gameOver.classList.add('show');
-                }
-            });
-            
-            nextBtn.addEventListener('click', function() {
-                nextPlayer();
-                card.classList.remove('flipped');
-                nextBtn.disabled = true;
-            });
-            
-            resetBtn.addEventListener('click', function() {
-                resetGame();
-            });
-            
-            // Funciones del juego
-            function drawCard() {
-                if (availableChallenges.length > 0) {
-                    const randomIndex = Math.floor(Math.random() * availableChallenges.length);
-                    currentChallenge = availableChallenges[randomIndex];
-                    challengeText.textContent = currentChallenge;
-                    card.classList.add('flipped');
-                    completeBtn.disabled = false;
-                }
+            if (intento === clave) {
+                location.href = "apartado2.html";
+            } else if (intento !== null) {
+                alert("❌ Contraseña incorrecta. Inténtalo de nuevo.");
             }
-            
-            function markChallengeComplete() {
-                // Eliminar el reto actual de los disponibles
-                const index = availableChallenges.indexOf(currentChallenge);
-                if (index > -1) {
-                    availableChallenges.splice(index, 1);
-                    remainingChallenges = availableChallenges.length;
-                    updateUI();
-                }
-            }
-            
-            function nextPlayer() {
-                currentPlayer = currentPlayer === 1 ? 2 : 1;
-                updateUI();
-            }
-            
-            function updateUI() {
-                playerTurn.textContent = `Jugador ${currentPlayer}`;
-                currentPlayerElement.textContent = `Turno del Jugador ${currentPlayer}`;
-                remainingElement.textContent = remainingChallenges;
-            }
-            
-            function resetGame() {
-                availableChallenges = [...challenges];
-                remainingChallenges = availableChallenges.length;
-                currentPlayer = 1;
-                card.classList.remove('flipped');
-                completeBtn.disabled = true;
-                nextBtn.disabled = true;
-                gameOver.classList.remove('show');
-                updateUI();
-            }
-            
-            function createConfetti() {
-                for (let i = 0; i < 30; i++) {
-                    const confetti = document.createElement('div');
-                    confetti.classList.add('confetti');
-                    confetti.style.left = Math.random() * 100 + 'vw';
-                    confetti.style.backgroundColor = getRandomColor();
-                    confetti.style.animationDuration = (Math.random() * 3 + 2) + 's';
-                    document.body.appendChild(confetti);
-                    
-                    // Eliminar el confeti después de la animación
-                    setTimeout(() => {
-                        confetti.remove();
-                    }, 5000);
-                }
-            }
-            
-            function getRandomColor() {
-                const colors = ['#ff4d94', '#ff7eb9', '#ff5e8e', '#ff85a2', '#ff9ebb'];
-                return colors[Math.floor(Math.random() * colors.length)];
-            }
-        });
+        }
     </script>
 </body>
 </html>
